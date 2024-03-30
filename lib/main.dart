@@ -1,6 +1,10 @@
+import 'package:fixmasters_user_app/bindings/root_bindings.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/loginPage.dart';
+import 'package:fixmasters_user_app/view/screens/auth_screen/signupPage.dart';
+import 'package:fixmasters_user_app/view/screens/home_screen/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,6 +21,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => HomePage(),transition: Transition.fade),
+        GetPage(name: '/login', page: () => LoginPage(),transition: Transition.fadeIn),
+        GetPage(name: '/signup', page: () => SignupPage(),transition: Transition.fadeIn),
+      ],
+      initialBinding: RootBindings(),
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange, brightness: Brightness.light),
@@ -26,6 +37,10 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(
             fontWeight: FontWeight.bold
           ),
+            bodyLarge: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16
+            )
             // titleSmall: TextStyle(
             //     fontWeight: FontWeight.bold
             // )
@@ -41,13 +56,17 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(
               fontWeight: FontWeight.bold
           ),
+          bodyLarge: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16
+          )
           // titleSmall: TextStyle(
           //     fontWeight: FontWeight.bold
           // )
         ),
       ),
-      home: LoginPage(),
-      themeMode: ThemeMode.dark,
+      home: HomePage(),
+      themeMode: ThemeMode.light,
     );
   }
 }
