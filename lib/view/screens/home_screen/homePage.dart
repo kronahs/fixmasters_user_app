@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14.0),
           child: SingleChildScrollView(
+            physics: ScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -48,7 +49,9 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Categories', style: Theme.of(context).textTheme.bodyText1),
-                    TextButton(onPressed: () {}, child: Text('See all'))
+                    TextButton(onPressed: () {
+                      Get.toNamed('/category');
+                    }, child: Text('See all'))
                   ],
                 ),
                 SizedBox(height: 8),
@@ -82,27 +85,26 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
 
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: GetX<ServiceProvidersController>(
-                    builder: (providerController) {
-                      LocationModel location = LocationModel(latitude: 234, longitude: 423, address: 'dfsd', city: 'dfd');
-                      providerController.fetchNearestProviders(location);
+                GetX<ServiceProvidersController>(
+                  builder: (providerController) {
+                    LocationModel location = LocationModel(latitude: 234, longitude: 423, address: 'dfsd', city: 'dfd');
+                    providerController.fetchNearestProviders(location);
 
-                      return ListView.builder(
-                        // scrollDirection: Axis.horizontal,
-                        itemCount: providerController.providers.length,
-                        itemBuilder: (context, index) {
-                          // Access the service provider model at the current index
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      // scrollDirection: Axis.horizontal,
+                      itemCount: providerController.providers.length,
+                      itemBuilder: (context, index) {
+                        // Access the service provider model at the current index
 
-                          ServiceProviderModel serviceProvider = providerController.providers[index];
+                        ServiceProviderModel serviceProvider = providerController.providers[index];
 
-                          // Return a ServiceProvidersCard widget for each service provider
-                          return ServiceProvidersCard(serviceProviderModel: serviceProvider);
-                        },
-                      );
-                    },
-                  ),
+                        // Return a ServiceProvidersCard widget for each service provider
+                        return ServiceProvidersCard(serviceProviderModel: serviceProvider);
+                      },
+                    );
+                  },
                 )
 
               ],

@@ -1,6 +1,7 @@
 import 'package:fixmasters_user_app/bindings/root_bindings.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/loginPage.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/signupPage.dart';
+import 'package:fixmasters_user_app/view/screens/category_screen/categoryPage.dart';
 import 'package:fixmasters_user_app/view/screens/home_screen/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => HomePage(),transition: Transition.fade),
         GetPage(name: '/login', page: () => LoginPage(),transition: Transition.fadeIn),
         GetPage(name: '/signup', page: () => SignupPage(),transition: Transition.fadeIn),
+        GetPage(name: '/category', page: () => CategoryPage(),transition: Transition.rightToLeftWithFade),
       ],
       initialBinding: RootBindings(),
       title: 'Flutter Demo',
@@ -66,7 +68,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: HomePage(),
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
     );
   }
 }

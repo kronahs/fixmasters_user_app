@@ -23,7 +23,7 @@ class _HeroWidgetState extends State<HeroWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,
-      height: 200,
+      height: 170,
       child: Stack(
         children: [
           PageView.builder(
