@@ -1,7 +1,9 @@
+import 'package:fixmasters_user_app/controller/bottom_nav_controller.dart';
 import 'package:fixmasters_user_app/controller/service_provider_controller.dart';
 import 'package:fixmasters_user_app/model/location_model.dart';
 import 'package:fixmasters_user_app/model/service_providers_model.dart';
 import 'package:fixmasters_user_app/view/screens/home_screen/heroWidget.dart';
+import 'package:fixmasters_user_app/view/widgets/bottomNav.dart';
 import 'package:fixmasters_user_app/view/widgets/categoryCard.dart';
 import 'package:fixmasters_user_app/view/widgets/serviceProviderCard.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +20,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14.0),
+          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 2.0),
           child: SingleChildScrollView(
             physics: ScrollPhysics(),
             child: Column(
@@ -87,7 +88,7 @@ class HomePage extends StatelessWidget {
 
                 GetX<ServiceProvidersController>(
                   builder: (providerController) {
-                    LocationModel location = LocationModel(latitude: 234, longitude: 423, address: 'dfsd', city: 'dfd');
+                    LocationModel location = LocationModel(latitude: 234, longitude: 423, address: 'dfsd', city: 'dfd'); //TODO: ADD USER LOCATION
                     providerController.fetchNearestProviders(location);
 
                     return ListView.builder(
@@ -111,6 +112,12 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: Get.find<BottomNavigationController>().currentIndex.toInt(),
+        onTap: (index) {
+          Get.find<BottomNavigationController>().changePage(index);
+        },
       ),
     );
   }

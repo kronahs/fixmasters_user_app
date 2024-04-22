@@ -1,8 +1,12 @@
 import 'package:fixmasters_user_app/bindings/root_bindings.dart';
+import 'package:fixmasters_user_app/controller/bottom_nav_controller.dart';
+import 'package:fixmasters_user_app/view/chat_screen/chatPage.dart';
+import 'package:fixmasters_user_app/view/profile_screen/profilePage.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/loginPage.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/signupPage.dart';
 import 'package:fixmasters_user_app/view/screens/category_screen/categoryPage.dart';
 import 'package:fixmasters_user_app/view/screens/home_screen/homePage.dart';
+import 'package:fixmasters_user_app/view/screens/search_screen/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -21,6 +25,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BottomNavigationController navigationController = Get.put(BottomNavigationController());
     return GetMaterialApp(
       initialRoute: '/',
       getPages: [
@@ -28,6 +33,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => LoginPage(),transition: Transition.fadeIn),
         GetPage(name: '/signup', page: () => SignupPage(),transition: Transition.fadeIn),
         GetPage(name: '/category', page: () => CategoryPage(),transition: Transition.rightToLeftWithFade),
+        GetPage(name: '/search', page: () => SearchPage(),transition: Transition.fadeIn),
+        GetPage(name: '/profile', page: () => ProfilePage(),transition: Transition.fadeIn),
+        GetPage(name: '/chat', page: () => ChatPage(),transition: Transition.fadeIn)
       ],
       initialBinding: RootBindings(),
       title: 'Flutter Demo',
@@ -67,8 +75,11 @@ class MyApp extends StatelessWidget {
           // )
         ),
       ),
-      home: HomePage(),
-      themeMode: ThemeMode.dark,
+      home: LoginPage(),
+      // GetX<BottomNavigationController>(builder: (controller){
+      //   return controller.currentPage;
+      // }),
+      themeMode: ThemeMode.system,
     );
   }
 }
