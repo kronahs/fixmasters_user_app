@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class ServiceProvidersCard extends StatelessWidget {
   final HandymanModel serviceProviderModel;
+  final VoidCallback onTap;
 
-  const ServiceProvidersCard({Key? key, required this.serviceProviderModel}) : super(key: key);
+  const ServiceProvidersCard({Key? key, required this.serviceProviderModel, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class ServiceProvidersCard extends StatelessWidget {
             ],
           ),
         ),
-        onTap: (){},
+        onTap: onTap,
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fixmasters_user_app/bindings/root_bindings.dart';
 import 'package:fixmasters_user_app/controller/bottom_nav_controller.dart';
+import 'package:fixmasters_user_app/controller/chatController.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/loginPage.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/otpPage.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/signupPage.dart';
@@ -30,6 +31,7 @@ Future main() async{
   await dotenv.load(fileName: ".env");
   Get.put(AuthController());
   Get.put(UserController());
+  Get.put(ChatController());
 
   runApp(const MyApp());
 }

@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:fixmasters_user_app/controller/handyman_controller.dart';
 import 'package:fixmasters_user_app/model/handyman_model.dart';
 import '../../../controller/bottom_nav_controller.dart';
+import '../../../controller/chatController.dart';
 import '../../../controller/userController.dart';
 import '../../widgets/bottomNav.dart';
 import '../../widgets/categoryCard.dart';
 import '../../widgets/serviceProviderCard.dart';
+import '../chat_screen/messagePage.dart';
 import 'heroWidget.dart';
 
 class HomePage extends StatelessWidget {
@@ -107,7 +109,21 @@ class HomePage extends StatelessWidget {
                         itemCount: handymanController.handymens.length,
                         itemBuilder: (context, index) {
                           final serviceProvider = handymanController.handymens[index];
-                          return ServiceProvidersCard(serviceProviderModel: serviceProvider);
+                          return ServiceProvidersCard(
+                            key: Key(serviceProvider.uid), // Pass the uid as the key
+                            serviceProviderModel: serviceProvider,
+                            onTap: () {
+                              Get.to(
+                                MessagePage(
+                                  chatUserName: serviceProvider.fullname,
+                                  chatUserImg: serviceProvider.profilePic,
+                                  isOnline: serviceProvider.isOnline.toString(),
+                                  receiverId: serviceProvider.uid,
+                                  lastActive: DateTime.now().toString()
+                                ),
+                              );
+                            },
+                          );
                         },
                       );
                     }
