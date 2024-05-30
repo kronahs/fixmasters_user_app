@@ -1,22 +1,36 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:fixmasters_user_app/bindings/root_bindings.dart';
 import 'package:fixmasters_user_app/controller/bottom_nav_controller.dart';
-import 'package:fixmasters_user_app/view/chat_screen/chatPage.dart';
-import 'package:fixmasters_user_app/view/profile_screen/profilePage.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/loginPage.dart';
+import 'package:fixmasters_user_app/view/screens/auth_screen/otpPage.dart';
 import 'package:fixmasters_user_app/view/screens/auth_screen/signupPage.dart';
 import 'package:fixmasters_user_app/view/screens/category_screen/categoryPage.dart';
+import 'package:fixmasters_user_app/view/screens/chat_screen/chatPage.dart';
 import 'package:fixmasters_user_app/view/screens/home_screen/homePage.dart';
+import 'package:fixmasters_user_app/view/screens/profile_screen/profilePage.dart';
 import 'package:fixmasters_user_app/view/screens/search_screen/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+import 'controller/authController.dart';
+import 'controller/userController.dart';
+
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
+  await dotenv.load(fileName: ".env");
+  Get.put(AuthController());
+  Get.put(UserController());
+
   runApp(const MyApp());
 }
 
@@ -38,7 +52,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/chat', page: () => ChatPage(),transition: Transition.fadeIn)
       ],
       initialBinding: RootBindings(),
-      title: 'Flutter Demo',
+      title: 'FixMasters',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange, brightness: Brightness.light),
         useMaterial3: false,
@@ -54,6 +68,18 @@ class MyApp extends StatelessWidget {
             // titleSmall: TextStyle(
             //     fontWeight: FontWeight.bold
             // )
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+            ),
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
+            ),
+          ),
         ),
       ),
 
@@ -75,10 +101,10 @@ class MyApp extends StatelessWidget {
           // )
         ),
       ),
-      home: LoginPage(),
-      // GetX<BottomNavigationController>(builder: (controller){
-      //   return controller.currentPage;
-      // }),
+      home: GetX<BottomNavigationController>(builder: (controller) {
+                return controller.currentPage;
+              }),
+
       themeMode: ThemeMode.system,
     );
   }

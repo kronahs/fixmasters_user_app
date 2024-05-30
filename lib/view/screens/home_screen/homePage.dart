@@ -1,17 +1,17 @@
-import 'package:fixmasters_user_app/controller/bottom_nav_controller.dart';
-import 'package:fixmasters_user_app/controller/service_provider_controller.dart';
-import 'package:fixmasters_user_app/model/location_model.dart';
-import 'package:fixmasters_user_app/model/service_providers_model.dart';
-import 'package:fixmasters_user_app/view/screens/home_screen/heroWidget.dart';
-import 'package:fixmasters_user_app/view/widgets/bottomNav.dart';
-import 'package:fixmasters_user_app/view/widgets/categoryCard.dart';
-import 'package:fixmasters_user_app/view/widgets/serviceProviderCard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:fixmasters_user_app/controller/handyman_controller.dart';
+import 'package:fixmasters_user_app/model/handyman_model.dart';
+import '../../../controller/bottom_nav_controller.dart';
+import '../../../controller/userController.dart';
+import '../../widgets/bottomNav.dart';
+import '../../widgets/categoryCard.dart';
+import '../../widgets/serviceProviderCard.dart';
+import 'heroWidget.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key});
+  final UserController userController = Get.find<UserController>();
+  final HandymanController handymanController = Get.put(HandymanController());
 
   List<String> imageUrl = [
     "https://static.vecteezy.com/system/resources/previews/014/401/048/non_2x/repair-works-professional-construction-service-free-vector.jpg",
@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hello! Octavian'),
+                    Text('Hello! ${userController.userData.value['fullname']}'),
                     IconButton(
                       onPressed: () {},
                       icon: Icon(Icons.notifications_none),
@@ -56,26 +56,24 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8),
-                // Wrap CategoryCard widgets with a ListView and add horizontal padding
-// Wrap the ListView with a Container and provide a fixed height
                 Container(
-                  height: 100, // Adjust the height according to your needs
+                  height: 100,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      InkWell( onTap: (){},child: CategoryCard(iconData: Icons.format_paint, categoryName: 'Painting')),
-                      SizedBox(width: 8), // Add spacing between cards
+                      InkWell(
+                        onTap: () {},
+                        child: CategoryCard(iconData: Icons.format_paint, categoryName: 'Painting'),
+                      ),
+                      SizedBox(width: 8),
                       CategoryCard(iconData: Icons.clean_hands, categoryName: 'Cleaning'),
-                      SizedBox(width: 8), // Add spacing between cards
+                      SizedBox(width: 8),
                       CategoryCard(iconData: Icons.electric_bolt, categoryName: 'Electric'),
-                      SizedBox(width: 8), // Add spacing between cards
-                      CategoryCard(iconData: Icons.electric_bolt, categoryName: 'Electric'),
-                      SizedBox(width: 8), // Add spacing between cards
+                      SizedBox(width: 8),
                       CategoryCard(iconData: Icons.more_vert_outlined, categoryName: 'More'),
                     ],
                   ),
                 ),
-
                 SizedBox(height: 14),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,29 +83,36 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8),
-
-                GetX<ServiceProvidersController>(
-                  builder: (providerController) {
-                    LocationModel location = LocationModel(latitude: 234, longitude: 423, address: 'dfsd', city: 'dfd'); //TODO: ADD USER LOCATION
-                    providerController.fetchNearestProviders(location);
-
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      // scrollDirection: Axis.horizontal,
-                      itemCount: providerController.providers.length,
-                      itemBuilder: (context, index) {
-                        // Access the service provider model at the current index
-
-                        ServiceProviderModel serviceProvider = providerController.providers[index];
-
-                        // Return a ServiceProvidersCard widget for each service provider
-                        return ServiceProvidersCard(serviceProviderModel: serviceProvider);
-                      },
-                    );
+                GetX<HandymanController>(
+                  initState: (_) async {
+                    await userController.getLocation();
+                    if (userController.location.isNotEmpty) {
+                      try {
+                        await handymanController.fetchNearestHandymen(userController.location);
+                      } catch (e) {
+                        print("Error fetching handymen: $e");
+                        // Handle error gracefully (display message, retry button, etc.)
+                      }
+                    }
                   },
-                )
-
+                  builder: (handymanController) {
+                    if (handymanController.handymens.isEmpty) {
+                      return Center(
+                        child: CircularProgressIndicator(), // Or any loading indicator
+                      );
+                    } else {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: handymanController.handymens.length,
+                        itemBuilder: (context, index) {
+                          final serviceProvider = handymanController.handymens[index];
+                          return ServiceProvidersCard(serviceProviderModel: serviceProvider);
+                        },
+                      );
+                    }
+                  },
+                ),
               ],
             ),
           ),

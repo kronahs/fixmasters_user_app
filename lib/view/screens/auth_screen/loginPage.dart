@@ -1,21 +1,44 @@
+import 'package:fixmasters_user_app/controller/authController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key});
+  LoginPage({Key? key});
+
+  AuthController authController = Get.find();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  void onLogin() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+
+
+    try{
+      await authController.signInWithEmailAndPassword(email, password);
+    }
+    catch(e){
+      Get.snackbar('Error', 'Passwords do not match');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14.0),
+          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset('assets/images/login-pic.jpg'),
+                ),
+                SizedBox(height: 20),
                 Text('Login', style: Theme.of(context).textTheme.headline6,),
                 SizedBox(height: 6),
                 Text('Welcome back', style: Theme.of(context).textTheme.bodyText2,),
@@ -28,6 +51,7 @@ class LoginPage extends StatelessWidget {
                     Text('Email'),
                     SizedBox(height: 10),
                     TextFormField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'Enter your email',
                         border: OutlineInputBorder(
@@ -42,6 +66,7 @@ class LoginPage extends StatelessWidget {
                     Text('Password'),
                     SizedBox(height: 10),
                     TextFormField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Enter your password',
                         border: OutlineInputBorder(
@@ -68,43 +93,9 @@ class LoginPage extends StatelessWidget {
                 SizedBox(height: 20),
 
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: onLogin,
                   child: Text('Sign in'),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    minimumSize: Size(double.infinity, 0),
-                  ),
-                ),
-
-                SizedBox(height: 25),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Or'),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.2),
-                      ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 25),
-
-                TextButton(
-                  onPressed: () {},
-                  child: Text('Sign in with Google'),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
-                    foregroundColor: Theme.of(context).colorScheme.onBackground,
                     padding: EdgeInsets.symmetric(vertical: 14.0),
                     minimumSize: Size(double.infinity, 0),
                   ),

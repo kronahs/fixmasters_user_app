@@ -1,6 +1,7 @@
-import 'package:fixmasters_user_app/view/chat_screen/chatPage.dart';
-import 'package:fixmasters_user_app/view/profile_screen/profilePage.dart';
+
+import 'package:fixmasters_user_app/view/screens/chat_screen/chatPage.dart';
 import 'package:fixmasters_user_app/view/screens/home_screen/homePage.dart';
+import 'package:fixmasters_user_app/view/screens/profile_screen/profilePage.dart';
 import 'package:fixmasters_user_app/view/screens/search_screen/searchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
