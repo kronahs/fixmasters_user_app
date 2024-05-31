@@ -35,7 +35,63 @@ class ProfilePage extends StatelessWidget {
     }
   }
 
+  void confirmSignOut(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Sign Out'),
+          content: Text('Are you sure you want to sign out?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                signOut();
+              },
+              child: Text('Sign Out'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
+  void confirmDeleteUser(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete Account'),
+          content: Text('Are you sure you want to delete your account? This action cannot be undone.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                deleteUser();
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void changeProfileImage() {
+    // Handle change profile image action
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +101,7 @@ class ProfilePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
                 Center(
@@ -54,12 +110,27 @@ class ProfilePage extends StatelessWidget {
                       final userData = userController.userData.value;
                       return Column(
                         children: [
-                          CircleAvatar(
-                            radius: 60,
-                            foregroundImage: NetworkImage(
-                              userData['profilePic'] ?? '', // Updated to use userData from the controller
-                            ),
+                          Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 60,
+                                foregroundImage: NetworkImage(
+                                  userData['profilePic'] ?? '',
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: IconButton(
+                                  icon: Icon(Icons.camera_alt),
+                                  onPressed: changeProfileImage,
+                                  tooltip: 'Change Profile Image',
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
+                          SizedBox(height: 10),
                           Text(
                             userData['fullname'] ?? 'No Name',
                             style: Theme.of(context).textTheme.headline5,
@@ -78,36 +149,43 @@ class ProfilePage extends StatelessWidget {
                           SizedBox(height: 20),
                           Divider(),
                           SizedBox(height: 20),
-                          _buildUserInfoRow(context, Icons.phone, 'Phone', userData['phone_number'] ?? 'No Number'), // Replace with dynamic phone number
+                          _buildUserInfoRow(
+                            context,
+                            Icons.phone,
+                            'Phone',
+                            userData['phone_number'] ?? 'No Number',
+                          ),
                           SizedBox(height: 20),
-                          _buildUserInfoRow(context, Icons.location_city, 'Location', userData['location'] ?? 'No Location'), // Replace with dynamic location
+                          _buildUserInfoRow(
+                            context,
+                            Icons.location_city,
+                            'Location',
+                            userData['location'] ?? 'No Location',
+                          ),
                           SizedBox(height: 20),
                         ],
                       );
                     },
                   ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Handle edit profile button
-                  },
-                  icon: Icon(Icons.edit),
-                  label: Text('Edit Profile'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.secondary,
-                  ),
+                SizedBox(height: 30),
+                Text(
+                  "Settings",
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-                SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: deleteUser,
-                  icon: Icon(Icons.delete),
-                  label: Text('Delete Account'),
+                SizedBox(height: 10),
+                _buildSettingsTile(
+                  context,
+                  icon: Icons.logout,
+                  label: 'Sign Out',
+                  onTap: () => confirmSignOut(context),
                 ),
-                SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: signOut,
-                  icon: Icon(Icons.logout),
-                  label: Text('Sign Out'),
+                SizedBox(height: 10),
+                _buildSettingsTile(
+                  context,
+                  icon: Icons.delete,
+                  label: 'Delete Account',
+                  onTap: () => confirmDeleteUser(context),
                 ),
               ],
             ),
@@ -145,6 +223,20 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSettingsTile(BuildContext context, {required IconData icon, required String label, required VoidCallback onTap}) {
+    return ListTile(
+      onTap: onTap,
+      leading: Icon(icon),
+      title: Text(label),
+      trailing: Icon(Icons.arrow_forward_ios),
+      tileColor: Theme.of(context).colorScheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     );
   }
 }

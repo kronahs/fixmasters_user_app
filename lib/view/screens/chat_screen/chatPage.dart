@@ -51,6 +51,7 @@ class _ChatPageState extends State<ChatPage> with AutomaticKeepAliveClientMixin 
         actions: [
           IconButton(
               onPressed: () async {
+                Get.find<BottomNavigationController>().changePage(1);
                 // String? selectedUser = await showSearch(
                 //   context: context,
                 //   delegate: UserSearchDelete(userServiceProvider: UserServiceProvider(),appBarColor: Theme.of(context).colorScheme.primary),
@@ -130,7 +131,7 @@ class _ChatPageState extends State<ChatPage> with AutomaticKeepAliveClientMixin 
                   builder: (context) => MessagePage(
                     chatUserName: data['fullname'],
                     chatUserImg: data['profilePic'],
-                    isOnline: data['is_online'] ?? false,
+                    isOnline: data['is_online'].toString(),
                     receiverId: data['uid'],
                     lastActive: data['last_active'] ?? '',
                   ),

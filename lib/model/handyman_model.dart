@@ -6,7 +6,7 @@ class HandymanModel {
   final String fullname;
   final String phoneNumber;
   final String profilePic;
-  final bool isOnline;
+  final String isOnline;
   final bool isHandyman;
   final String location;
   final double avgRating; // Assuming average rating is stored as a number

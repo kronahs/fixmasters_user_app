@@ -42,72 +42,85 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BottomNavigationController navigationController = Get.put(BottomNavigationController());
-    return GetMaterialApp(
-      initialRoute: '/',
-      getPages: [
-        GetPage(name: '/', page: () => HomePage(),transition: Transition.fade),
-        GetPage(name: '/login', page: () => LoginPage(),transition: Transition.fadeIn),
-        GetPage(name: '/signup', page: () => SignupPage(),transition: Transition.fadeIn),
-        GetPage(name: '/category', page: () => CategoryPage(),transition: Transition.rightToLeftWithFade),
-        GetPage(name: '/search', page: () => SearchPage(),transition: Transition.fadeIn),
-        GetPage(name: '/profile', page: () => ProfilePage(),transition: Transition.fadeIn),
-        GetPage(name: '/chat', page: () => ChatPage(),transition: Transition.fadeIn)
-      ],
-      initialBinding: RootBindings(),
-      title: 'FixMasters',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange, brightness: Brightness.light),
-        useMaterial3: false,
-        fontFamily: GoogleFonts.poppins().fontFamily,
-        textTheme: TextTheme(
-          titleLarge: TextStyle(
-            fontWeight: FontWeight.bold
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top],
+    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Color(0xff424242).withOpacity(0.002),
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+
+      child: GetMaterialApp(
+        initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => HomePage(),transition: Transition.fade),
+          GetPage(name: '/login', page: () => LoginPage(),transition: Transition.fadeIn),
+          GetPage(name: '/signup', page: () => SignupPage(),transition: Transition.fadeIn),
+          GetPage(name: '/category', page: () => CategoryPage(),transition: Transition.rightToLeftWithFade),
+          GetPage(name: '/search', page: () => SearchPage(),transition: Transition.fadeIn),
+          GetPage(name: '/profile', page: () => ProfilePage(),transition: Transition.fadeIn),
+          GetPage(name: '/chat', page: () => ChatPage(),transition: Transition.fadeIn)
+        ],
+        initialBinding: RootBindings(),
+        title: 'FixMasters',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange, brightness: Brightness.light),
+          useMaterial3: false,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+          textTheme: TextTheme(
+            titleLarge: TextStyle(
+              fontWeight: FontWeight.bold
+            ),
+              bodyLarge: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16
+              )
+              // titleSmall: TextStyle(
+              //     fontWeight: FontWeight.bold
+              // )
           ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
+              ),
+            ),
+          ),
+        ),
+
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange, brightness: Brightness.dark),
+          useMaterial3: false,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+          textTheme: TextTheme(
+            titleLarge: TextStyle(
+                fontWeight: FontWeight.bold
+            ),
             bodyLarge: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16
+              fontWeight: FontWeight.bold,
+              fontSize: 16
             )
             // titleSmall: TextStyle(
             //     fontWeight: FontWeight.bold
             // )
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-            ),
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
-            ),
           ),
         ),
-      ),
+        home: GetX<BottomNavigationController>(builder: (controller) {
+                  return controller.currentPage;
+                }),
 
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange, brightness: Brightness.dark),
-        useMaterial3: false,
-        fontFamily: GoogleFonts.poppins().fontFamily,
-        textTheme: TextTheme(
-          titleLarge: TextStyle(
-              fontWeight: FontWeight.bold
-          ),
-          bodyLarge: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16
-          )
-          // titleSmall: TextStyle(
-          //     fontWeight: FontWeight.bold
-          // )
-        ),
+        themeMode: ThemeMode.system,
       ),
-      home: GetX<BottomNavigationController>(builder: (controller) {
-                return controller.currentPage;
-              }),
-
-      themeMode: ThemeMode.system,
     );
   }
 }

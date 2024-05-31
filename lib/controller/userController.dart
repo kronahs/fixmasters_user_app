@@ -100,6 +100,11 @@ class UserController extends GetxController {
       await initialize();
       await _firestore.collection('users').doc(uid).delete();
 
+      QuerySnapshot chatRoomsSnapshot = await _firestore.collection('chat_rooms').where('users', arrayContains: uid).get();
+      await Future.forEach(chatRoomsSnapshot.docs, (chatRoomDoc) async {
+        await chatRoomDoc.reference.delete();
+      });
+
       await _firebaseAuth.currentUser!.delete();
       update();
       return true;
